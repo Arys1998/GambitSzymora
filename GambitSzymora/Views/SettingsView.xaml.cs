@@ -31,9 +31,9 @@ namespace GambitSzymora.Views
 
         private void SaveSettings(object sender, RoutedEventArgs e)
         {
+     
             var color = (cmbColors.SelectedItem as System.Reflection.PropertyInfo).Name;
             SolidColorBrush backgourdColor = (SolidColorBrush)new BrushConverter().ConvertFromString(color);
-            //App.Current.Properties["Background"] = backgourdColor;
             var width = (Width.SelectedItem as System.Windows.Controls.ComboBoxItem).Content;
             var height = (Height.SelectedItem as System.Windows.Controls.ComboBoxItem).Content;
 
