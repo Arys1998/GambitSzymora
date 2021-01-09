@@ -28,6 +28,9 @@ namespace GambitSzymora
         public MainWindow()
         {
             InitializeComponent();
+            ChessBoard chessBoard = new ChessBoard(ButtonNext, ButtonPrevious);
+            Grid.SetRow(chessBoard, 1);
+            GamePanel.Children.Add(chessBoard);
             DataContext = new MainViewModel();
             
         }
