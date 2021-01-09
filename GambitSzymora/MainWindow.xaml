@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:GambitSzymora"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="GambitSzymora" Height="1000" Width="1200" WindowStartupLocation="CenterScreen" 
+      Title="GambitSzymora" WindowStartupLocation="CenterScreen" 
        Style="{DynamicResource Resolution}">
     <Grid RenderTransformOrigin="0.743,0.446" Style="{DynamicResource BackgroundColor}">
 
