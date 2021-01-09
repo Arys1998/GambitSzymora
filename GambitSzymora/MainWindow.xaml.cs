@@ -1,5 +1,6 @@
 ﻿using GambitSzymora.Models;
 using GambitSzymora.ViewModels;
+using GambitSzymora.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,9 +29,6 @@ namespace GambitSzymora
         public MainWindow()
         {
             InitializeComponent();
-            ChessBoard chessBoard = new ChessBoard(ButtonNext, ButtonPrevious);
-            Grid.SetRow(chessBoard, 1);
-            GamePanel.Children.Add(chessBoard);
             DataContext = new MainViewModel();
             
         }
@@ -44,10 +42,11 @@ namespace GambitSzymora
 
         private async void StartNewGame(object sender, RoutedEventArgs e)
         {
-            await httpService.GetEndpoitResponse("https://history-service.azurewebsites.net/api/StartNewGame?");
+            //await httpService.GetEndpoitResponse("https://history-service.azurewebsites.net/api/StartNewGame?");
             MoveModel moveModel = new MoveModel();
 
-            this.Close();
+            GameWindow gameWindow = new GameWindow();
+            gameWindow.Show();
         }
 
     }

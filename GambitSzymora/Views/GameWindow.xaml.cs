@@ -10,19 +10,21 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace GambitSzymora
+namespace GambitSzymora.Views
 {
     /// <summary>
-    /// Interaction logic for Settings.xaml
+    /// Interaction logic for GameWindow.xaml
     /// </summary>
-    public partial class Settings : Page
+    public partial class GameWindow : Window
     {
-        public Settings()
+        public GameWindow()
         {
             InitializeComponent();
+            ChessBoard chessBoard = new ChessBoard(ButtonNext, ButtonPrevious);
+            Grid.SetRow(chessBoard, 1);
+            GamePanel.Children.Add(chessBoard);
         }
     }
 }
