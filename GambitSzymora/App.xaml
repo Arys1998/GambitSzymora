@@ -21,7 +21,7 @@
                 <views:SettingsView/>
             </DataTemplate>
             <Style x:Key="BackgroundColor" TargetType="{x:Type Grid}">
-                <Setter Property="Background" Value="BurlyWood" />
+                <Setter Property="Background" Value="#FFCDA087" />
             </Style>
             <Style x:Key="Resolution" TargetType="{x:Type Window}">
                 <Setter Property="Width" Value="1200" />

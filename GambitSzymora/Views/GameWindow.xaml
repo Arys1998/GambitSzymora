@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GambitSzymora"
         mc:Ignorable="d"
-        Title="Gambit Szymora" Height="1400" Width="1200" MinWidth="1400" MinHeight="1200" ScrollViewer.VerticalScrollBarVisibility="Disabled" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight">
+        Title="Gambit Szymora" Height="1400" Width="1200" MinWidth="1400" MinHeight="1200" ScrollViewer.VerticalScrollBarVisibility="Disabled" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" Style="{DynamicResource Resolution}">
 
-    <Grid Background="#FFCDA087">
+    <Grid Style="{DynamicResource BackgroundColor}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="16*"/>
             <ColumnDefinition Width="4*"/>
@@ -17,7 +17,7 @@
             </RowDefinition>
         </Grid.RowDefinitions>
 
-        <Grid Name="GamePanel" Background="#FFCDA087">
+        <Grid Name="GamePanel" Style="{DynamicResource BackgroundColor}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/>
                 <RowDefinition Height="16*"/>
