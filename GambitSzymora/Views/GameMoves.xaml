@@ -1,0 +1,22 @@
+﻿<Window x:Class="GambitSzymora.GameMoves"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GambitSzymora"
+        mc:Ignorable="d"
+        Title="GameMoves" Height="450" Width="800"
+        Style="{DynamicResource Resolution}">
+    <Grid Style="{DynamicResource BackgroundColor}">
+        <ListView x:Name="gameMovesList" HorizontalAlignment="Left" Height="402" Margin="10,10,0,0" VerticalAlignment="Top" Width="775">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding nr_ruchu}" Header="Numer Ruchu" Width="260"></GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding poz_pocz}" Header="Pozycja Poczatkowa" Width="260"></GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding poz_konc}" Header="Pozycja Koncowa" Width="260"></GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+    </Grid>
+</Window>

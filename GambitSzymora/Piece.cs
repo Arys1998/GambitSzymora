@@ -57,7 +57,9 @@ namespace GambitSzymora
                 Height = Constants.PieceHeight,
                 Width = Constants.PieceWidth
             };
+            Console.WriteLine(image);
         }
+        
         public override List<Move> GetMoves()
         {
             if (color == PieceColor.White)

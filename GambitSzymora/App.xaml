@@ -2,8 +2,35 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:GambitSzymora"
-             StartupUri="MainWindow.xaml">
+              xmlns:views="clr-namespace:GambitSzymora.Views"
+             xmlns:viewmodels="clr-namespace:GambitSzymora.ViewModels"
+             xmlns:model="crl-namespace:GambitSzymora.Models"
+             StartupUri="StartWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Brown.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Blue.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <DataTemplate DataType="{x:Type viewmodels:HistoryViewModel}">
+                <views:GameHistoryView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:SettingsViewModel}">
+                <views:SettingsView/>
+            </DataTemplate>
+            <Style x:Key="BackgroundColor" TargetType="{x:Type Grid}">
+                <Setter Property="Background" Value="#FFCDA087" />
+            </Style>
+            <Style x:Key="Resolution" TargetType="{x:Type Window}">
+                <Setter Property="Width" Value="1200" />
+                <Setter Property="Height" Value="1000" />
+            </Style>
+            <Style x:Key="ResolutionControl" TargetType="{x:Type UserControl}">
+                <Setter Property="Width" Value="1200" />
+                <Setter Property="Height" Value="1000" />
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
