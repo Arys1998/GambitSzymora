@@ -8,6 +8,9 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Input;
+using GambitSzymora.ViewModels;
+using GambitSzymora.Models;
+using Newtonsoft.Json;
 
 namespace GambitSzymora
 {
@@ -15,22 +18,46 @@ namespace GambitSzymora
     {
         private Square[,] squares = new Square[8, 8];
         private Square selectedSquare = null;
-        private int turn = 1;
+        private int turn;
+        private int Turn
+        {
+            get { return turn; }
+            set
+            {
+                turn = value;
+                turnLabel.Content = $"Numer ruchu: {value}";
+            }
+        }
         private Match match;
+        private HttpService httpService = new HttpService();
+        private Button buttonPrevious;
+        private Button buttonContinue;
+        private Button buttonNext;
+        private ListBox movesList;
+        private Label turnLabel;
+
+        private void SetSquare(int column, int row, Square square) { squares[column - 1, row - 1] = square; }
+        private Square GetSquare(int column, int row) { return squares[column - 1, row - 1]; }
+        private void SetPiece(int column, int row, Piece piece) { GetSquare(column, row).piece = piece; }
+        private void AddPiece(int column, int row, Type type, PieceColor color) { GetSquare(column, row).AddPiece(type, color); }
+        private void RemovePiece(int column, int row) { GetSquare(column, row).RemovePiece(); }
+        private Piece GetPiece(int column, int row) { return GetSquare(column, row).piece != null ? GetSquare(column, row).piece : null; }
+
+        private bool HavePiece(int column, int row) { return GetPiece(column,row) != null ? true : false; }
 
         //  -- Create chessboard using black and white squares.
         private void InitBoard()
         {
             Rows = 8;
             Columns = 8;
-            for (int i = 0; i < 8; i++)
-                for (int ii = 0; ii < 8; ii++)
+            for (int i = 1; i <= 8; i++)
+                for (int ii = 1; ii <= 8; ii++)
                 {
                     Square square;
-                    if (ii % 2 == i % 2) { square = new Square(Constants.WhiteSquareColor, i + 1, ii + 1); }
-                    else { square = new Square(Constants.BlackSquareColor, i + 1, ii + 1); }
+                    if (ii % 2 == i % 2) { square = new Square(Constants.WhiteSquareColor, i, ii); }
+                    else { square = new Square(Constants.BlackSquareColor, i, ii); }
                     square.Click += new RoutedEventHandler(OnSquareClick);
-                    squares[i, ii] = square;
+                    SetSquare(i, ii, square);
                     this.Children.Add(square);
                 }
         }
@@ -38,35 +65,34 @@ namespace GambitSzymora
         //  -- Create starting point for game adding pieces to chessboard.
         private void PopulateBoard()
         {
-            for (int i = 0; i < 8; i++)
+            for (int i = 1; i <= 8; i++)
             {
-                squares[1, i].AddPiece(typeof(Pawn), PieceColor.Black);
-                squares[6, i].AddPiece(typeof(Pawn), PieceColor.White);
+                AddPiece(2, i, typeof(Pawn), PieceColor.Black);
+                AddPiece(7, i, typeof(Pawn), PieceColor.White);
             }
-            squares[0, 0].AddPiece(typeof(Rook), PieceColor.Black);
-            squares[0, 7].AddPiece(typeof(Rook), PieceColor.Black);
-            squares[7, 0].AddPiece(typeof(Rook), PieceColor.White);
-            squares[7, 7].AddPiece(typeof(Rook), PieceColor.White);
+            AddPiece(1, 1, typeof(Rook), PieceColor.Black);
+            AddPiece(1, 8, typeof(Rook), PieceColor.Black);
+            AddPiece(8, 1, typeof(Rook), PieceColor.White);
+            AddPiece(8, 8, typeof(Rook), PieceColor.White);
 
-            squares[0, 1].AddPiece(typeof(Knight), PieceColor.Black);
-            squares[0, 6].AddPiece(typeof(Knight), PieceColor.Black);
-            squares[7, 1].AddPiece(typeof(Knight), PieceColor.White);
-            squares[7, 6].AddPiece(typeof(Knight), PieceColor.White);
+            AddPiece(1, 2, typeof(Knight), PieceColor.Black);
+            AddPiece(1, 7, typeof(Knight), PieceColor.Black);
+            AddPiece(8, 2, typeof(Knight), PieceColor.White);
+            AddPiece(8, 7, typeof(Knight), PieceColor.White);
 
-            squares[0, 2].AddPiece(typeof(Bishop), PieceColor.Black);
-            squares[0, 5].AddPiece(typeof(Bishop), PieceColor.Black);
-            squares[7, 2].AddPiece(typeof(Bishop), PieceColor.White);
-            squares[7, 5].AddPiece(typeof(Bishop), PieceColor.White);
+            AddPiece(1, 3, typeof(Bishop), PieceColor.Black);
+            AddPiece(1, 6, typeof(Bishop), PieceColor.Black);
+            AddPiece(8, 3, typeof(Bishop), PieceColor.White);
+            AddPiece(8, 6, typeof(Bishop), PieceColor.White);
 
-            squares[0, 3].AddPiece(typeof(Queen), PieceColor.Black);
-            squares[7, 3].AddPiece(typeof(Queen), PieceColor.White);
+            AddPiece(1, 4, typeof(Queen), PieceColor.Black);
+            AddPiece(8, 4, typeof(Queen), PieceColor.White);
 
-            squares[0, 4].AddPiece(typeof(King), PieceColor.Black);
-            squares[7, 4].AddPiece(typeof(King), PieceColor.White);
+            AddPiece(1, 5, typeof(King), PieceColor.Black);
+            AddPiece(8, 5, typeof(King), PieceColor.White);
 
         }
 
-        private void Castle() { }
         private void SelectSquare(Square square)
         {
             selectedSquare?.Unselect();
@@ -75,7 +101,7 @@ namespace GambitSzymora
             selectedSquare = square;
             foreach (Move move in selectedSquare?.piece.GetMoves())
                 if (IsOnChessBoard(square.column + move.columns, square.row + move.rows) && CanMove(square, move))
-                    squares[square.column - 1 + move.columns, square.row - 1 + move.rows].Highlight();
+                    GetSquare(square.column + move.columns, square.row + move.rows).Highlight();
         }
 
         //  -- Check if piece is not blocked and can move to choosen Square.
@@ -94,8 +120,8 @@ namespace GambitSzymora
             //  Check if player wants to move with Pawn.
             if (startSquare.piece is Pawn)
             {
-                if (move.rows != 0 && squares[startSquare.column - 1 + move.columns, startSquare.row - 1 + move.rows].piece == null) return false;
-                else if (move.rows == 0 && squares[startSquare.piece.column - 1 + move.columns, startSquare.piece.row - 1].piece != null) return false;
+                if (move.rows != 0 && !HavePiece(startSquare.column + move.columns, startSquare.row + move.rows)) return false;
+                else if (move.rows == 0 && HavePiece(startSquare.column + move.columns, startSquare.row)) return false;
             }
 
             maxIncrement = Math.Max(Math.Abs(move.columns), Math.Abs(move.rows));
@@ -109,8 +135,21 @@ namespace GambitSzymora
             {
                 int columnToCheck = startSquare.column + i * columnDirection;
                 int rowToCheck = startSquare.row + i * rowDirection;
-                if (squares[columnToCheck - 1, rowToCheck - 1].piece != null) return false;
+                if (HavePiece(columnToCheck, rowToCheck)) return false;
             }
+
+            //  Check if can castle.
+            /*if (startSquare.piece is King && Math.Abs(move.rows) >= 2)
+            {
+                int moveDirection = move.rows / Math.Abs(move.rows);
+                int rookRow = startSquare.row + move.rows + moveDirection - 1;
+                Square rookSquare = squares[startSquare.column - 1, rookRow];
+                if (!(rookSquare.piece is Rook) ||
+                    !(rookSquare.piece as Rook).canCastle ||
+                    IsChecked(turn))
+                    return false;
+            }*/
+
             return true;
         }
 
@@ -123,7 +162,7 @@ namespace GambitSzymora
             selectedSquare = null;
             if (endSquare.piece is Pawn) PawnPromotion(endSquare.piece);
             else if (endSquare.piece is King) { var piece = endSquare.piece as King; piece.canCastle = false; }
-            turn++;
+            Turn++;
             RefreshView();
         }
 
@@ -132,20 +171,20 @@ namespace GambitSzymora
         {
             endSquare.AddPiece(startSquare.piece);
             startSquare.RemovePiece();
-            turn++;
+            Turn++;
         }
 
         //  -- Check if King of player who makes move is under check.
-        bool IsChecked()
+        bool IsChecked(int playerTurn)
         {
             PieceColor playerColor;
-            if ((turn - 1) % 2 == 1) playerColor = PieceColor.White;
+            if ((playerTurn) % 2 == 1) playerColor = PieceColor.White;
             else playerColor = PieceColor.Black;
             foreach (Square square in squares)
                 if (square.piece != null && square.piece.color != playerColor)
                     foreach (Move move in square.piece.GetMoves())
                         if (IsOnChessBoard(square.column + move.columns, square.row + move.rows) && CanMove(square, move))
-                            if (squares[square.column - 1 + move.columns, square.row - 1 + move.rows].piece is King)
+                            if (GetPiece(square.column + move.columns, square.row + move.rows) is King)
                                 return true;
             return false;
         }
@@ -154,20 +193,20 @@ namespace GambitSzymora
         bool IsMated()
         {
             PieceColor playerColor;
-            if (turn % 2 == 1) playerColor = PieceColor.White;
+            if (Turn % 2 == 1) playerColor = PieceColor.White;
             else playerColor = PieceColor.Black;
             foreach (Square square in squares)
                 if (square.piece != null && square.piece.color == playerColor)
                     foreach (Move move in square.piece.GetMoves())
                         if (IsOnChessBoard(square.column + move.columns, square.row + move.rows) && CanMove(square, move))
                         {
-                            MakeForcedMove(square, squares[square.column - 1 + move.columns, square.row - 1 + move.rows]);
-                            if (!IsChecked())
+                            MakeForcedMove(square, GetSquare(square.column + move.columns, square.row + move.rows));
+                            if (!IsChecked(Turn - 1))
                             {
-                                LoadSnapshot(turn - 1);
+                                LoadSnapshot(Turn - 1);
                                 return false;
                             }
-                            LoadSnapshot(turn - 1);
+                            LoadSnapshot(Turn - 1);
                         }
             return true;
         }
@@ -180,22 +219,30 @@ namespace GambitSzymora
                 else { square.BorderBrush = Constants.SquareBorderColor; square.BorderThickness = new Thickness(Constants.SquareBorderThickness); }
         }
 
+        private void ClearView()
+        {
+            selectedSquare = null;
+            foreach (Square square in squares)
+            {
+                square.isSelected = false;
+                square.BorderBrush = Constants.SquareBorderColor; square.BorderThickness = new Thickness(Constants.SquareBorderThickness);
+            }
+        }
+
         private bool IsOnChessBoard(int column, int row)
         {
-            if (column >= 1 && row >= 1 && column <= 8 && row <= 8)
-                return true;
-            else
-                return false;
+            if (column >= 1 && row >= 1 && column <= 8 && row <= 8) return true;
+            else return false;
         }
 
         //  -- Promote pawn if possible.
         void PawnPromotion(Piece piece)
         {
-            if ((turn % 2 == 0 && piece.column == 8) ||
-                (turn % 2 == 1 && piece.column == 1))
+            if ((Turn % 2 == 0 && piece.column == 8) ||
+                (Turn % 2 == 1 && piece.column == 1))
             {
-                squares[piece.column - 1, piece.row - 1].RemovePiece();
-                squares[piece.column - 1, piece.row - 1].AddPiece(typeof(Queen), piece.color);
+                RemovePiece(piece.column - 1, piece.row - 1);
+                AddPiece(piece.column, piece.row, typeof(Queen), piece.color);
             }
         }
 
@@ -204,7 +251,7 @@ namespace GambitSzymora
         void OnSquareClick(object sender, RoutedEventArgs e)
         {
             PieceColor colorMove;
-            if (turn % 2 == 0) colorMove = PieceColor.Black;
+            if (Turn % 2 == 0) colorMove = PieceColor.Black;
             else colorMove = PieceColor.White;
 
             Square clickedSquare = e.Source as Square;
@@ -215,39 +262,89 @@ namespace GambitSzymora
                 SelectSquare(clickedSquare);
             }
             //  Check if any piece is selected.
-            else if (selectedSquare != null)
+            else if (selectedSquare != null && Turn == match.turns)
             {
                 //  Get possible moves for selected piece and check if player can move to choosen square.
                 List<Move> availableMoves = selectedSquare?.piece.GetMoves();
                 Move foundMove = availableMoves.Find(move => (selectedSquare.row + move.rows == clickedSquare.row) && (selectedSquare.column + move.columns == clickedSquare.column));
+                //  Check if Piece can make selected move, path to Square is not blocked and king is not taken.
                 if (foundMove != null && (CanMove(selectedSquare, foundMove)) && !(clickedSquare.piece is King))
                 {
+                    (int, int) startPosition = (selectedSquare.column, selectedSquare.row);
                     MakeMove(clickedSquare);
-                    if (IsChecked())
+                    if (IsChecked(Turn-1))
                     {
-                        LoadSnapshot(turn - 1);
+                        LoadSnapshot(Turn - 1);
+                        if (IsMated()) ShowMate();
                         ShowCheck();
-                        if (IsMated()) ClearBoard();
                     }
-                    else match.SaveSnap(new ChessBoardSnapshot(turn, squares));
+                    else
+                    {
+                        match.SaveSnap(new ChessBoardSnapshot(Turn, squares), new PieceMove(clickedSquare.piece, startPosition, foundMove));
+                    }
                 }
             }
         }
 
+        //  - Highlight king if is checked
         void ShowCheck()
         {
             PieceColor color;
-            if (turn % 2 == 1) color = PieceColor.White;
+            if (Turn % 2 == 1) color = PieceColor.White;
             else color = PieceColor.Black;
             foreach (Square square in squares)
-                if (square.piece is King && square.piece.color == color) square.ShowCheck(); 
+                if (square.piece is King && square.piece.color == color)
+                    square.ShowCheck(); 
         }
-        public ChessBoard(Button buttonNext, Button buttonPrevious) : base()
+
+        //  - Highlight king if is on mate.
+        void ShowMate()
         {
+            PieceColor color;
+            if (Turn % 2 == 1) color = PieceColor.White;
+            else color = PieceColor.Black;
+            foreach (Square square in squares)
+                if (square.piece is King && square.piece.color == color)
+                    square.ShowMate();
+        }
+        public ChessBoard(Button buttonPrevious, Button buttonContinue, Button buttonNext, ListBox movesList, Label turnLabel) : base()
+        {
+            this.movesList = movesList;
+            this.turnLabel = turnLabel;
+            this.buttonPrevious = buttonPrevious;
+            this.buttonContinue = buttonContinue;
+            this.buttonNext = buttonNext;
+
+            buttonPrevious.Click += OnButtonPreviousClick;
+            buttonContinue.Click += OnButtonContinueClick;
+            buttonNext.Click += OnButtonNextClick;
+
+            Turn = 1;
+
             InitBoard();
             PopulateBoard();
-            match = new Match();
-            match.SaveSnap(new ChessBoardSnapshot(turn, squares));
+            match = new Match(movesList);
+            match.SaveSnap(new ChessBoardSnapshot(Turn, squares));
+
+
+
+        }
+
+        void OnButtonPreviousClick(object sender, RoutedEventArgs e)
+        {
+            LoadSnapshot(Turn-1);
+            ClearView();
+        }
+
+        void OnButtonContinueClick(object sender, RoutedEventArgs e)
+        {
+            LoadSnapshot(match.turns);
+            ClearView();
+        }
+        void OnButtonNextClick(object sender, RoutedEventArgs e)
+        {
+            LoadSnapshot(Turn + 1);
+            ClearView();
         }
 
         //  -- Remove all Pieces from ChessBoard.
@@ -265,6 +362,7 @@ namespace GambitSzymora
         //  -- Load state of ChessBoard from given turn.
         public void LoadSnapshot(int loadTurn)
         {
+            if (loadTurn < 1 || loadTurn > match.turns) return;
             ChessBoardSnapshot snapshot = match.GetSnapshot(loadTurn);
             ClearBoard();
             foreach (PieceSnapshot pieceSnapshot in snapshot.pieceSnapshots)
@@ -272,7 +370,7 @@ namespace GambitSzymora
                 Piece piece = pieceSnapshot.LoadSnapshot();
                 squares[piece.column - 1, piece.row - 1].AddPiece(piece);
             }
-            turn = loadTurn;
+            Turn = loadTurn;
         }
     }
 

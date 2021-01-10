@@ -72,6 +72,12 @@ namespace GambitSzymora
             BorderBrush = Constants.CheckedSquareBorderColor;
             BorderThickness = new Thickness(Constants.CheckedSquareBorderThickness);
         }
+
+        public void ShowMate()
+        {
+            BorderBrush = Constants.MatedSquareBorderColor;
+            BorderThickness = new Thickness(Constants.MatedSquareBorderThickness);
+        }
         public void Unselect()
         {
             if (isSelected)

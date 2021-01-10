@@ -9,25 +9,78 @@
 
     <Grid Background="#FFCDA087">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="16*"/>
-            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="1000"/>
+            <ColumnDefinition Width="4.5*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition>
             </RowDefinition>
         </Grid.RowDefinitions>
-
-        <Grid Name="GamePanel" Background="#FFCDA087">
+        <Grid Grid.Column="0" Background="Transparent">
             <Grid.RowDefinitions>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="16*"/>
-                <RowDefinition Height="2*"/>
+                <RowDefinition Height="0.8*"/>
+                <RowDefinition Height="125"/>
+                <RowDefinition Height="125"/>
+                <RowDefinition Height="125"/>
+                <RowDefinition Height="125"/>
+                <RowDefinition Height="125"/>
+                <RowDefinition Height="125"/>
+                <RowDefinition Height="125"/>
+                <RowDefinition Height="125"/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
+            <Label Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF795548" FontSize="20" FontWeight="Bold">8</Label>
+            <Label Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF795548" FontSize="20" FontWeight="Bold">7</Label>
+            <Label Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF795548" FontSize="20" FontWeight="Bold">6</Label>
+            <Label Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF795548" FontSize="20" FontWeight="Bold">5</Label>
+            <Label Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF795548" FontSize="20" FontWeight="Bold">4</Label>
+            <Label Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF795548" FontSize="20" FontWeight="Bold">3</Label>
+            <Label Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF795548" FontSize="20" FontWeight="Bold">2</Label>
+            <Label Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF795548" FontSize="20" FontWeight="Bold">1</Label>
         </Grid>
 
-        <StackPanel Grid.Column="1" Background="#FFD4A94B" VerticalAlignment="Center">
-            <Button Name="ButtonNext" Content="Next" Height="37"/>
-            <Button Name="ButtonPrevious" Content="Previous" Height="37"/>
+        <Grid Name="GamePanel" Grid.Column="1" Background="Transparent">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2.5*"/>
+                <RowDefinition Height="1000"/>
+                <RowDefinition Height="0.5*"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Background="Transparent">
+                <Image Name="BlackPlayerIcon" Width="120" Height="120" HorizontalAlignment="Left" Source="Images/BKing.png" Stretch="Fill" VerticalAlignment="Center"/>
+            </StackPanel>
+            <Grid Grid.Row="2" Background="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF795548" FontSize="20" FontWeight="Bold">A</Label>
+                <Label Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF795548" FontSize="20" FontWeight="Bold">B</Label>
+                <Label Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF795548" FontSize="20" FontWeight="Bold">C</Label>
+                <Label Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF795548" FontSize="20" FontWeight="Bold">D</Label>
+                <Label Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF795548" FontSize="20" FontWeight="Bold">E</Label>
+                <Label Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF795548" FontSize="20" FontWeight="Bold">F</Label>
+                <Label Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF795548" FontSize="20" FontWeight="Bold">G</Label>
+                <Label Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF795548" FontSize="20" FontWeight="Bold">H</Label>
+            </Grid>
+            <StackPanel Grid.Row="3" Background="Transparent" Orientation="Horizontal">
+                <Image Name="WhitePlayerIcon" Width="120" Height="120" HorizontalAlignment="Left" Source="Images/WKing.png" Stretch="Fill" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+
+        <StackPanel Grid.Column="2" Background="Transparent" VerticalAlignment="Center">
+            <ListBox Name="MovesList" Height="700" BorderBrush="#FF795548" BorderThickness="2" FontSize="16" Foreground="#FF795548"/>
+            <Label Name="TurnLabel" Content="Numer ruchu: " HorizontalAlignment="Center" BorderBrush="#FF795548" BorderThickness="0" Foreground="#FF795548" FontSize="20" FontWeight="Bold"/>
+            <Button Name="ButtonNext" Content="Next" Height="40" Margin="20"/>
+            <Button Name="ButtonContinue" Content="Continue" Height="40" Margin="20"/>
+            <Button Name="ButtonPrevious" Content="Previous" Height="40" Margin="20"/>
         </StackPanel>
     </Grid>
 </Window>
