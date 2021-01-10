@@ -138,18 +138,6 @@ namespace GambitSzymora
                 if (HavePiece(columnToCheck, rowToCheck)) return false;
             }
 
-            //  Check if can castle.
-            /*if (startSquare.piece is King && Math.Abs(move.rows) >= 2)
-            {
-                int moveDirection = move.rows / Math.Abs(move.rows);
-                int rookRow = startSquare.row + move.rows + moveDirection - 1;
-                Square rookSquare = squares[startSquare.column - 1, rookRow];
-                if (!(rookSquare.piece is Rook) ||
-                    !(rookSquare.piece as Rook).canCastle ||
-                    IsChecked(turn))
-                    return false;
-            }*/
-
             return true;
         }
 
@@ -162,7 +150,9 @@ namespace GambitSzymora
             selectedSquare = null;
             if (endSquare.piece is Pawn) PawnPromotion(endSquare.piece);
             else if (endSquare.piece is King) { var piece = endSquare.piece as King; piece.canCastle = false; }
+            else if (endSquare.piece is Rook) { var piece = endSquare.piece as Rook; piece.canCastle = false; }
             Turn++;
+            ClearView();
             RefreshView();
         }
 
@@ -172,6 +162,7 @@ namespace GambitSzymora
             endSquare.AddPiece(startSquare.piece);
             startSquare.RemovePiece();
             Turn++;
+            ClearView();
         }
 
         //  -- Check if King of player who makes move is under check.
@@ -224,8 +215,7 @@ namespace GambitSzymora
             selectedSquare = null;
             foreach (Square square in squares)
             {
-                square.isSelected = false;
-                square.BorderBrush = Constants.SquareBorderColor; square.BorderThickness = new Thickness(Constants.SquareBorderThickness);
+                square.Unselect();
             }
         }
 
@@ -271,7 +261,12 @@ namespace GambitSzymora
                 if (foundMove != null && (CanMove(selectedSquare, foundMove)) && !(clickedSquare.piece is King))
                 {
                     (int, int) startPosition = (selectedSquare.column, selectedSquare.row);
-                    MakeMove(clickedSquare);
+                    Piece movedPiece = selectedSquare.piece;
+                    if (selectedSquare.piece is King && Math.Abs(foundMove.rows) >= 2)
+                    {
+                        if (!TryCastle(selectedSquare, foundMove)) return;
+                    }
+                    else MakeMove(clickedSquare);
                     if (IsChecked(Turn-1))
                     {
                         LoadSnapshot(Turn - 1);
@@ -280,7 +275,7 @@ namespace GambitSzymora
                     }
                     else
                     {
-                        match.SaveSnap(new ChessBoardSnapshot(Turn, squares), new PieceMove(clickedSquare.piece, startPosition, foundMove));
+                        match.SaveSnap(new ChessBoardSnapshot(Turn, squares), new PieceMove(movedPiece, startPosition, foundMove));
                     }
                 }
             }
@@ -306,6 +301,23 @@ namespace GambitSzymora
             foreach (Square square in squares)
                 if (square.piece is King && square.piece.color == color)
                     square.ShowMate();
+        }
+
+        bool TryCastle(Square square, Move move)
+        {
+            King king = square.piece as King;
+            int direction = move.rows / Math.Abs(move.rows);
+            Square rookSquare = GetSquare(king.column, king.row + move.rows + direction);
+            Rook rook = rookSquare.piece as Rook;
+            if (king.canCastle && rook.canCastle)
+            {
+                MakeForcedMove(square, GetSquare(king.column, king.row + move.rows));
+                MakeForcedMove(rookSquare, GetSquare(king.column, king.row - direction));
+                Turn--;
+                return true;
+            }
+            return false;
+
         }
         public ChessBoard(Button buttonPrevious, Button buttonContinue, Button buttonNext, ListBox movesList, Label turnLabel) : base()
         {

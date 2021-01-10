@@ -28,8 +28,9 @@ namespace GambitSzymora
 
         public override List<Move> GetMoves()
         {
-            return new List<Move> { new Move(0, 1), new Move(1, 0), new Move(1, 1), new Move(0, -1), new Move(-1, 0), new Move(-1, -1), new Move(1, -1), new Move(-1, 1),
-                                    new Move(0, -3), new Move(0, 2) };
+            List<Move> result = new List<Move> { new Move(0, 1), new Move(1, 0), new Move(1, 1), new Move(0, -1), new Move(-1, 0), new Move(-1, -1), new Move(1, -1), new Move(-1, 1) };
+            if (canCastle) { result.Add(new Move(0, -3)); result.Add(new Move(0, 2)); }
+            return result;
         }
     }
 }
