@@ -25,19 +25,19 @@ namespace GambitSzymora
         {
             char startColumn = Constants.ToChar(startPosition.Item2);
             char endColumn = Constants.ToChar(endPosition.Item2);
-            string result = $"{piece.color} moves {piece.GetType().Name} from {startColumn}{startPosition.Item1} to {endColumn}{endPosition.Item1}";
+            string result = $"{piece.color} moves {piece.GetType().Name} from {startColumn}{9-startPosition.Item1} to {endColumn}{9-endPosition.Item1}";
             return result;
         }
 
        public string getStartPosition()
         {
             char startColumn = Constants.ToChar(startPosition.Item2);
-            return $"{startColumn}{startPosition.Item1}";
+            return $"{startColumn}{9-startPosition.Item1}";
         }
         public string getEndPosition()
         {
             char endColumn = Constants.ToChar(endPosition.Item2);
-            return $"{endColumn}{endPosition.Item1}";
+            return $"{endColumn}{9-endPosition.Item1}";
         }
 
     }

@@ -18,12 +18,21 @@ namespace GambitSzymora
         ListBox movesList;
         MoveModel moveModel = new MoveModel();
         HttpService httpService = new HttpService();
+        int matchID;
         public Match(ListBox movesList)
         {
             turns = 0;
             snapshots = new List<ChessBoardSnapshot>();
             pieceMoves = new List<PieceMove>();
             this.movesList = movesList;
+            GetMatchId();
+        }
+
+        public async Task GetMatchId()
+        {
+            string response = await httpService.GetEndpoitResponse("https://history-service.azurewebsites.net/api/GetCurrentGameID?");
+            GameID responseJson = JsonConvert.DeserializeObject<GameID>(response);
+            matchID = responseJson.id;
         }
 
 
@@ -36,24 +45,28 @@ namespace GambitSzymora
             moveItem.Content = pieceMove.ToString();
             movesList.Items.Add(moveItem);
 
-            string response = await httpService.GetEndpoitResponse("https://history-service.azurewebsites.net/api/GetCurrentGameID?");
-            GameID responseJson = JsonConvert.DeserializeObject<GameID>(response);
-            int gameID = responseJson.id;
 
             string startPosition = pieceMove.getStartPosition();
             string endPosition = pieceMove.getEndPosition();
-            moveModel.id_partii = gameID;
+            moveModel.id_partii = matchID;
             moveModel.nr_ruchu = turns;
             moveModel.poz_pocz = startPosition;
             moveModel.poz_konc = endPosition;
 
-            await httpService.postMovesToDB(moveModel);
+            httpService.postMovesToDB(moveModel);
             turns++;
         }
+
+
         public void SaveSnap(ChessBoardSnapshot snapshot)
         {
             snapshots.Add(snapshot);
             turns++;
+        }
+
+        public void SaveSnap(ChessBoardSnapshot snapshot, int savedTurn)
+        {
+            snapshots[savedTurn-1] = snapshot;
         }
         public ChessBoardSnapshot GetSnapshot(int turn)
         {
