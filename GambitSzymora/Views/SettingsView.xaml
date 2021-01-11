@@ -9,7 +9,7 @@
     <Grid Style="{DynamicResource BackgroundColor}">
         <Label Content="Resolution" HorizontalAlignment="Left" Margin="50,100,0,0" VerticalAlignment="Top"/>
         <Label Content="Colour" HorizontalAlignment="Left" Margin="50,150,0,0" VerticalAlignment="Top"/>
-        <Label Content="Timer" HorizontalAlignment="Left" Margin="50,200,0,0" VerticalAlignment="Top"/>
+        
         <ComboBox Name="cmbColors" Width="150" Margin="150,150,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
@@ -30,12 +30,7 @@
             <ComboBoxItem>600</ComboBoxItem>
             <ComboBoxItem>400</ComboBoxItem>
         </ComboBox>
-        <ComboBox Name="Timer" HorizontalAlignment="Left" Margin="150,196,0,0" VerticalAlignment="Top" Width="150">
-            <ComboBoxItem>5 minutes</ComboBoxItem>
-            <ComboBoxItem>10 minutes</ComboBoxItem>
-            <ComboBoxItem>15 minutes</ComboBoxItem>
-        </ComboBox>
-        <Button Content="Save" HorizontalAlignment="Left" Margin="150,236,0,0" VerticalAlignment="Top" Width="75" Click="SaveSettings"/>
+        <Button Content="Save" HorizontalAlignment="Left" Margin="150,200,0,0" VerticalAlignment="Top" Width="75" Click="SaveSettings"/>
 
 
     </Grid>

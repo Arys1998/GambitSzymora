@@ -27,15 +27,12 @@ namespace GambitSzymora
     {
 
         HttpService httpService = new HttpService();
-        public static int gameID;
         public StartWindow()
         {
             InitializeComponent();
             DataContext = new MainViewModel();
 
         }
-
-
 
         private void Exit(object sender, RoutedEventArgs e)
         {
@@ -44,15 +41,12 @@ namespace GambitSzymora
 
         private async void StartNewGame(object sender, RoutedEventArgs e)
         {
-            //await httpService.GetEndpoitResponse("https://history-service.azurewebsites.net/api/StartNewGame?");
+            await httpService.GetEndpoitResponse("https://history-service.azurewebsites.net/api/StartNewGame?");
             MoveModel moveModel = new MoveModel();
 
             MainWindow gameWindow = new MainWindow();
-            string response = await httpService.GetEndpoitResponse("https://history-service.azurewebsites.net/api/GetCurrentGameID?");
-            GameID responseJson = JsonConvert.DeserializeObject<GameID>(response);
-            gameID = responseJson.id;
             gameWindow.Show();
-            
+            this.Close();
         }
 
     }
