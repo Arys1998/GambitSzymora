@@ -1,6 +1,7 @@
 ﻿using GambitSzymora.Models;
 using GambitSzymora.ViewModels;
 using GambitSzymora.Views;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,8 +34,6 @@ namespace GambitSzymora
 
         }
 
-
-
         private void Exit(object sender, RoutedEventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
@@ -42,11 +41,12 @@ namespace GambitSzymora
 
         private async void StartNewGame(object sender, RoutedEventArgs e)
         {
-            //await httpService.GetEndpoitResponse("https://history-service.azurewebsites.net/api/StartNewGame?");
+            await httpService.GetEndpoitResponse("https://history-service.azurewebsites.net/api/StartNewGame?");
             MoveModel moveModel = new MoveModel();
 
             MainWindow gameWindow = new MainWindow();
             gameWindow.Show();
+            this.Close();
         }
 
     }

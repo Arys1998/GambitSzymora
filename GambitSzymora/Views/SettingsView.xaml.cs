@@ -26,7 +26,7 @@ namespace GambitSzymora.Views
         {
             InitializeComponent();
             cmbColors.ItemsSource = typeof(Colors).GetProperties();
-
+            
         }
 
         private void SaveSettings(object sender, RoutedEventArgs e)
