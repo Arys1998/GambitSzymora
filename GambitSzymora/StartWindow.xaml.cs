@@ -1,6 +1,7 @@
 ﻿using GambitSzymora.Models;
 using GambitSzymora.ViewModels;
 using GambitSzymora.Views;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace GambitSzymora
     {
 
         HttpService httpService = new HttpService();
+        public static int gameID;
         public StartWindow()
         {
             InitializeComponent();
@@ -46,7 +48,11 @@ namespace GambitSzymora
             MoveModel moveModel = new MoveModel();
 
             MainWindow gameWindow = new MainWindow();
+            string response = await httpService.GetEndpoitResponse("https://history-service.azurewebsites.net/api/GetCurrentGameID?");
+            GameID responseJson = JsonConvert.DeserializeObject<GameID>(response);
+            gameID = responseJson.id;
             gameWindow.Show();
+            
         }
 
     }

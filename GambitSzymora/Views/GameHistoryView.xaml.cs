@@ -30,9 +30,10 @@ namespace GambitSzymora.Views
         public GameHistoryView()
         {
             InitializeComponent();
+            DownloadHistory();
         }
 
-        private async void DownloadHistory(object sender, RoutedEventArgs e)
+        private async void DownloadHistory()
         {
             string response = await httpService.GetEndpoitResponse("https://history-service.azurewebsites.net/api/HistoryGames?");
 

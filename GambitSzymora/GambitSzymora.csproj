@@ -85,6 +85,7 @@
     <Compile Include="Command\UpdateViewCommand.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Match.cs" />
+    <Compile Include="Models\GameID.cs" />
     <Compile Include="Models\MoveModel.cs" />
     <Compile Include="Models\StartGameModel.cs" />
     <Compile Include="PieceMove.cs" />

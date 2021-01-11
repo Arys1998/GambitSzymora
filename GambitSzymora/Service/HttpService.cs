@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace GambitSzymora.ViewModels
 {
@@ -40,8 +42,11 @@ namespace GambitSzymora.ViewModels
             try
             {
                 var json = JsonConvert.SerializeObject(moveModel);
-                var data = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PostAsync("https://history-service.azurewebsites.net/api/SaveMoveToDB?", data);
+                var buffer = System.Text.Encoding.UTF8.GetBytes(json);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                HttpResponseMessage response = await client.PostAsync("https://history-service.azurewebsites.net/api/SaveMoveToDB?code=MdQdkMJoltwaPoc3I9aZ7rGaXTxbqkxVYFQis3tauAQTSRdl3rPkXQ==", byteContent);
+                Console.WriteLine("Move Pushed to DB");
             }
             catch (HttpRequestException e)
             {

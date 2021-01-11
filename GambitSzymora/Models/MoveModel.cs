@@ -8,6 +8,7 @@ namespace GambitSzymora.Models
 {
     public class MoveModel
     {
+        public int id_partii { get; set; }
         public int nr_ruchu { get; set; }
         public string poz_pocz { get; set; }
         public string poz_konc { get; set; }

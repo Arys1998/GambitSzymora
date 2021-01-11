@@ -208,6 +208,7 @@ namespace GambitSzymora
                             }
                             LoadSnapshot(Turn - 1);
                         }
+           
             return true;
         }
 
@@ -275,7 +276,11 @@ namespace GambitSzymora
                     if (IsChecked(Turn-1))
                     {
                         LoadSnapshot(Turn - 1);
-                        if (IsMated()) ShowMate();
+                        if (IsMated()) 
+                        {
+                            ShowMate();
+                            MessageBox.Show("Game Ended!");
+                        } 
                         ShowCheck();
                     }
                     else

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GambitSzymora.Models;
+using GambitSzymora.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +15,9 @@ namespace GambitSzymora
         List<ChessBoardSnapshot> snapshots;
         List<PieceMove> pieceMoves;
         ListBox movesList;
-
+        int gameID = StartWindow.gameID;
+        MoveModel moveModel = new MoveModel();
+        HttpService httpService = new HttpService();
         public Match(ListBox movesList)
         {
             turns = 0;
@@ -22,7 +26,7 @@ namespace GambitSzymora
             this.movesList = movesList;
         }
 
-        public void SaveSnap(ChessBoardSnapshot snapshot, PieceMove pieceMove)
+        public async void SaveSnap(ChessBoardSnapshot snapshot, PieceMove pieceMove)
         {
             snapshots.Add(snapshot);
             pieceMoves.Add(pieceMove);
@@ -30,6 +34,15 @@ namespace GambitSzymora
             ListBoxItem moveItem = new ListBoxItem();
             moveItem.Content = pieceMove.ToString();
             movesList.Items.Add(moveItem);
+
+            string startPosition = pieceMove.getStartPosition();
+            string endPosition = pieceMove.getEndPosition();
+            moveModel.id_partii = 2;
+            moveModel.nr_ruchu = turns;
+            moveModel.poz_pocz = startPosition;
+            moveModel.poz_konc = endPosition;
+
+            await httpService.postMovesToDB(moveModel);
             turns++;
         }
         public void SaveSnap(ChessBoardSnapshot snapshot)
