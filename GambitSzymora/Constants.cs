@@ -32,14 +32,16 @@ namespace GambitSzymora
         public const int SquareBorderThickness = 1;
         public const int SelectedSquareBorderThickness = 6;
         public const int HighlightedSquareBorderThickness = 4;
-        public const int HighlightedTakeSquareBorderThickness = 15;
+        public const int HighlightedTakeSquareBorderThickness = 5;
         public const int CheckedSquareBorderThickness = 6;
+        public const int MatedSquareBorderThickness = 12;
 
         public static Brush SquareBorderColor = Brushes.Pink;
         public static Brush SelectedSquareBorderColor = Brushes.Blue;
         public static Brush HighlightedSquareBorderColor = Brushes.SkyBlue;
         public static Brush HighlightedTakeSquareBorderColor = Brushes.DarkRed;
         public static Brush CheckedSquareBorderColor = Brushes.Red;
+        public static Brush MatedSquareBorderColor = Brushes.Red;
 
         public static Brush WhiteSquareColor = (Brush)(new BrushConverter().ConvertFrom("#dfb995"));
         public static Brush BlackSquareColor = (Brush)(new BrushConverter().ConvertFrom("#4d2c26"));
@@ -47,5 +49,28 @@ namespace GambitSzymora
         public static Brush AvailableMoveColor = Brushes.LightSkyBlue;
         public static Brush SelectedSquareColor = Brushes.Brown;
 
+        public static char ToChar(int column)
+        {
+            switch (column)
+            {
+                case 1:
+                    return 'A';
+                case 2:
+                    return 'B';
+                case 3:
+                    return 'C';
+                case 4:
+                    return 'D';
+                case 5:
+                    return 'E';
+                case 6:
+                    return 'F';
+                case 7:
+                    return 'G';
+                case 8:
+                    return 'H';
+            }
+            return '1';
+        }
     }
 }

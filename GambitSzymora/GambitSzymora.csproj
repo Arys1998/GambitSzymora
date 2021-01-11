@@ -85,9 +85,16 @@
     <Compile Include="Command\UpdateViewCommand.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Match.cs" />
+    <Compile Include="Models\GameID.cs" />
     <Compile Include="Models\MoveModel.cs" />
     <Compile Include="Models\StartGameModel.cs" />
+    <Compile Include="PieceMove.cs" />
     <Compile Include="PieceSnapshot.cs" />
+    <Compile Include="Pieces\Bishop.cs" />
+    <Compile Include="Pieces\King.cs" />
+    <Compile Include="Pieces\Knight.cs" />
+    <Compile Include="Pieces\Queen.cs" />
+    <Compile Include="Pieces\Rook.cs" />
     <Compile Include="Service\HttpService.cs" />
     <Compile Include="Square.cs" />
     <Compile Include="StartWindow.xaml.cs">
@@ -115,7 +122,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ChessBoard.cs" />
-    <Compile Include="Piece.cs" />
+    <Compile Include="Pieces\Piece.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

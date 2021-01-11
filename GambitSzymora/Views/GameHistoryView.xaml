@@ -13,15 +13,15 @@
         </Style>
     </UserControl.Resources>
     <Grid Style="{DynamicResource BackgroundColor}">
-        <ListView x:Name="gameHistoryList" HorizontalAlignment="Left" Height="579" Margin="10,111,0,0" VerticalAlignment="Top" Width="1165" ItemContainerStyle="{StaticResource itemstlye}">
+        <ListView x:Name="gameHistoryList" HorizontalAlignment="Left" Height="579" Margin="10,111,0,0" VerticalAlignment="Top" Width="700" ItemContainerStyle="{StaticResource itemstlye}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding id}" Header="Game ID" Width="582"></GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding data_partii}" Header="Game Date" Width="582"></GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding id}" Header="Game ID" Width="350"></GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding data_partii}" Header="Game Date" Width="350"></GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button Content="Download Game History" HorizontalAlignment="Left" Margin="978,79,0,0" VerticalAlignment="Top" Width="197" Height="27" Click="DownloadHistory"/>
+        
 
 
     </Grid>

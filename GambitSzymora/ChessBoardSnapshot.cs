@@ -10,6 +10,7 @@ namespace GambitSzymora
     {
         public int turn;
         public List<PieceSnapshot> pieceSnapshots;
+
         public ChessBoardSnapshot(int turn, Square[,] squares)
         {
             this.turn = turn;
@@ -18,6 +19,5 @@ namespace GambitSzymora
                 if (square.piece != null) pieceSnapshots.Add(new PieceSnapshot(square.piece));
         }
     }
-
 
 }

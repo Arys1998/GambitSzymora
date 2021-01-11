@@ -23,7 +23,7 @@ namespace GambitSzymora
         public MainWindow()
         {
             InitializeComponent();
-            ChessBoard chessBoard = new ChessBoard(ButtonNext, ButtonPrevious);
+            ChessBoard chessBoard = new ChessBoard(ButtonPrevious, ButtonContinue, ButtonNext, MovesList, TurnLabel);
             Grid.SetRow(chessBoard, 1);
             GamePanel.Children.Add(chessBoard);
         }
